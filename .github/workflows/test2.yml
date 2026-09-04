@@ -1,0 +1,28 @@
+name: Deploy with OIDC
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login via OIDC
+        uses: azure/login@v2
+        with:
+          client-id: 2de0b868-c026-47a4-8f56-20ba60589b69
+          tenant-id: fdd066e1-ee37-49bc-b08f-d0e152119b04
+          subscription-id: f89fc1d7-0449-4b52-bdd7-804f53711a6f
+
+      - name: Azure CLI Script
+        run: |
+          az account show # Verifies authentication
+          # Run your deployment commands here   
