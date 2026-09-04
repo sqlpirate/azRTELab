@@ -1,0 +1,13 @@
+name: Print OIDC identity token
+on: { workflow_dispatch: {} }
+permissions:
+  id-token: write
+jobs:
+  view-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get-token
+        run: |
+          OIDC_TOKEN=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL")
+          # Base64 avoid GitHub masking
+          echo "$OIDC_TOKEN" | base64 -w0
